@@ -3,7 +3,11 @@ const router = require('express').Router();
 const customError = require('../errors');
 const moviesRouter = require('./movies');
 const usersRouter = require('./users');
+const appAuth = require('./auth');
+const { auth } = require('../middlewares/auth');
 
+router.use(appAuth);
+router.use(auth);
 router.use('/users', usersRouter);
 router.use('/movies', moviesRouter);
 

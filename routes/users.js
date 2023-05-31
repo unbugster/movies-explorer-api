@@ -1,4 +1,5 @@
 const usersRouter = require('express').Router();
+const { editUserProfileValidation } = require('../validation/users-valid');
 
 const {
   getUserProfile,
@@ -6,6 +7,6 @@ const {
 } = require('../controllers/users');
 
 usersRouter.get('/me', getUserProfile);
-usersRouter.patch('/me', editUserProfile);
+usersRouter.patch('/me', editUserProfileValidation, editUserProfile);
 
 module.exports = usersRouter;
