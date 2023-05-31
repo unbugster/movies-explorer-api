@@ -5,7 +5,7 @@ const { Error } = require('mongoose');
 const User = require('../models/user');
 const customError = require('../errors');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+const config = require('../config');
 
 const checkUser = (user, res) => {
   if (!user) {
@@ -73,9 +73,11 @@ const login = (req, res, next) => {
           return next(new customError.Unauthorized('Неправильные почта или пароль.'));
         }
 
-        const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', {
-          expiresIn: '7d',
-        });
+        const token = jwt.sign(
+          { _id: user._id },
+          config.JWT_SECRET,
+          { expiresIn: '7d' },
+        );
 
         return res.send({ token });
       });

@@ -8,10 +8,11 @@ const сentralizedErrors = require('./middlewares/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./utils/limiter');
 
-const app = express();
-const { PORT = 3000 } = process.env;
+const config = require('./config');
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb').then(() => {
+const app = express();
+
+mongoose.connect(config.CONNECT_DATABASE_PATH).then(() => {
 }).catch((error) => {
   console.log(`Error: ${error}`);
 });
@@ -28,6 +29,6 @@ app.use(errorLogger);
 app.use(errors());
 app.use(сentralizedErrors);
 
-app.listen(PORT, () => {
-  console.log(`Start server on port: ${PORT}`);
+app.listen(config.PORT, () => {
+  console.log(`Start server on port: ${config.PORT}`);
 });
