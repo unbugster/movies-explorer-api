@@ -7,9 +7,16 @@ const customError = require('../errors');
 
 const config = require('../config');
 
+const {
+  BAD_REQUEST,
+  USER_NOT_FOUND_MESSAGE,
+  EXISTING_EMAIL_MESSAGE,
+  NO_LOGIN_MESSAGE,
+} = require('../utils/errorMessages');
+
 const checkUser = (user, res) => {
   if (!user) {
-    throw new customError.NotFound('Пользователь с таким id не найден.');
+    throw new customError.NotFound(USER_NOT_FOUND_MESSAGE);
   }
   return res.send(user);
 };
@@ -19,7 +26,7 @@ const getUserProfile = (req, res, next) => {
     .then((user) => checkUser(user, res))
     .catch((error) => {
       if (error instanceof Error.CastError) {
-        return next(new customError.BadRequest('Переданы некорректные данные.'));
+        return next(new customError.BadRequest(BAD_REQUEST));
       }
       next(error);
     });
@@ -49,10 +56,10 @@ const createUser = (req, res, next) => {
         })
         .catch((error) => {
           if (error instanceof Error.ValidationError) {
-            return next(new customError.BadRequest('Некорректно переданы данные нового пользователя.'));
+            return next(new customError.BadRequest(BAD_REQUEST));
           }
           if (error.code === 11000) {
-            return next(new customError.Conflict('Пользователь с таким email уже зарегистрирован.'));
+            return next(new customError.Conflict(EXISTING_EMAIL_MESSAGE));
           }
           next(error);
         });
@@ -66,11 +73,11 @@ const login = (req, res, next) => {
     .select('+password')
     .then((user) => {
       if (!user) {
-        return next(new customError.Unauthorized('Неправильные почта или пароль.'));
+        return next(new customError.Unauthorized(NO_LOGIN_MESSAGE));
       }
       return bcrypt.compare(password, user.password).then((matched) => {
         if (!matched) {
-          return next(new customError.Unauthorized('Неправильные почта или пароль.'));
+          return next(new customError.Unauthorized(NO_LOGIN_MESSAGE));
         }
 
         const token = jwt.sign(
@@ -97,10 +104,10 @@ const editUserProfile = (req, res, next) => {
     .then((user) => checkUser(user, res))
     .catch((error) => {
       if (error instanceof Error.ValidationError) {
-        return next(new customError.BadRequest('Некорректные данные при редактировании профиля.'));
+        return next(new customError.BadRequest(BAD_REQUEST));
       }
       if (error.code === 11000) {
-        return next(new customError.Conflict('Пользователь с таким email уже зарегистрирован.'));
+        return next(new customError.Conflict(EXISTING_EMAIL_MESSAGE));
       }
       next(error);
     });

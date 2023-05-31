@@ -1,0 +1,9 @@
+module.exports.BAD_REQUEST = 'Переданы некорректные данные.';
+module.exports.SERVER_ERROR = 'На сервере произошла ошибка.';
+module.exports.NOT_FOUND_MESSAGE = 'Страница не найдена.';
+module.exports.MOVIE_NOT_FOUND_MESSAGE = 'Фильм по указанному id не найден.';
+module.exports.CANT_DELETE_NOT_YOUR_MOVIE_MESSAGE = 'Чужой фильм удалить нельзя.';
+module.exports.NO_AUTH_MESSAGE = 'Необходима авторизация.';
+module.exports.NO_LOGIN_MESSAGE = 'Неправильные почта или пароль.';
+module.exports.USER_NOT_FOUND_MESSAGE = 'Пользователь по указанному id не найден.';
+module.exports.EXISTING_EMAIL_MESSAGE = 'Пользователь с таким email уже зарегистрирован.';
