@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
+const cors = require('cors');
 
 const router = require('./routes');
 const сentralizedErrors = require('./middlewares/errors');
@@ -11,11 +12,13 @@ const limiter = require('./utils/limiter');
 const config = require('./config');
 
 const app = express();
-
-mongoose.connect(config.CONNECT_DATABASE_PATH).then(() => {
-}).catch((error) => {
-  console.log(`Error: ${error}`);
-});
+app.use(cors());
+mongoose
+  .connect(config.CONNECT_DATABASE_PATH)
+  .then(() => {})
+  .catch((error) => {
+    console.log(`Error: ${error}`);
+  });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
